@@ -35,15 +35,8 @@ def start(message):
         st = types.InlineKeyboardMarkup(row_width=2)
         st.add(start)
         bot.send_message(message.chat.id,text='اهلا بك في بوت صيد المتاحات 🤖\nاضغط على START 📶\n\nمبرمج البوت @BBPZZ 🚼',reply_markup=st)
-    try:
-        fio = open('sessoinid.txt','r').read().splitlines()
-    except FileNotFoundError as error:
-        with open('sessoinid.txt','a') as f0:
-            f0.write('')
-        start = types.InlineKeyboardButton(text='START - ابدء',callback_data='start')
-        st = types.InlineKeyboardMarkup(row_width=2)
-        st.add(start)
-        bot.send_message(message.chat.id,text='اهلا بك في بوت صيد المتاحات 🤖\nاضغط على START 📶\n\nمبرمج البوت @BBPZZ 🚼',reply_markup=st)
+    
+       
     start = types.InlineKeyboardButton(text='START - ابدء',callback_data='start')
     st = types.InlineKeyboardMarkup(row_width=2)
     st.add(start)
@@ -72,7 +65,7 @@ def call(call):
         ty.add(rm,rm1,rg)
         bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text='اختار احد الازار التالية',reply_markup=ty)
     elif call.data=='rm':
-        os.remove('sessoinid.txt')
+        os.remove('sessoinid.json')
         rg = types.InlineKeyboardButton(text='رجوع - 🔙',callback_data='start')
         rg1 = types.InlineKeyboardMarkup(row_width=2)
         rg1.add(rg)
@@ -84,11 +77,19 @@ def call(call):
         rg1.add(rg)
         bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text='تم حذف اللستة بنجاح..تم حذف لستة اليوزرات بنجاح',reply_markup=rg1)
     elif call.data=='list':
-        rg = types.InlineKeyboardButton(text='رجوع - 🔙',callback_data='start')
-        rg1 = types.InlineKeyboardMarkup(row_width=2)
-        rg1.add(rg)
-        message= bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text='حسنا الان ارسل اليوزر كي اقوم بسحب لستة لك..',reply_markup=rg1)
-        bot.register_next_step_handler(message,n2,message.id)
+        sessoinid3=str(json.loads(open('sessoinid.json','r').read())["sessoinid"])
+        if sessoinid3=='False':
+            rh = types.InlineKeyboardButton(text='رجوع - ↩️',callback_data='start')
+            dj = types.InlineKeyboardMarkup(row_width=2)
+            dj.add(rh)
+            bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='عليك اضافة سيشن ايدي اولا..',reply_markup=dj)
+        else:
+            
+            rg = types.InlineKeyboardButton(text='رجوع - 🔙',callback_data='start')
+            rg1 = types.InlineKeyboardMarkup(row_width=2)
+            rg1.add(rg)
+            message= bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id,text='حسنا الان ارسل اليوزر كي اقوم بسحب لستة لك..',reply_markup=rg1)
+            bot.register_next_step_handler(message,n2,message.id)
     elif call.data =='ch':
         rg = types.InlineKeyboardButton(text='رجوع - ↩️',callback_data='start')
         rg1 = types.InlineKeyboardMarkup(row_width=2)
@@ -97,67 +98,33 @@ def call(call):
         bot.register_next_step_handler(message,n3,message.id)
 
 def n1(message,id):
-    sessoinid = str(message.text)
-    try:
-        fi = open('sessoinid.txt','r').read().splitlines()
-    except FileNotFoundError as error:
-        with open('sessoinid.txt','a') as f9:
-            f9.write(f'{sessoinid}\n')
-        bot.send_message(message.chat.id,'تم اضافة السيشن ايدي بنجاح\n')
-    if sessoinid in fi:
-        bot.send_message(message.chat.id,'عذرا هذا السيشن ايدي موجود سابقا\n')
-    else:
-        with open('sessoinid.txt','a') as f9:
-            f9.write(f'{sessoinid}\n')
-        #bot.send_message(message.chat.id,'تم اضافة السيشن ايدي بنجاح\n')
+    sessoinid1 = str(message.text)
+    se = {"sessoinid": f'{sessoinid1}'}
+    json1 = json.dumps(se)
+    open('sessoinid.json','w').write(json1)
+    #bot.send_message(message.chat.id,'تم اضافة السيشن ايدي بنجاح\n')
+    rh = types.InlineKeyboardButton(text='رجوع - ↩️',callback_data='start')
+    dj = types.InlineKeyboardMarkup(row_width=2)
+    dj.add(rh)
+    bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='تم اضافة السيشن ايدي بنجاح..',reply_markup=dj)
+def n2(message,id):
+    global a,b,j,h,c,m,us
+    user1=str(message.text)
+    sessoinid2=str(json.loads(open('sessoinid.json','r').read())["sessoinid"])
+    if sessoinid2 =='False':
         rh = types.InlineKeyboardButton(text='رجوع - ↩️',callback_data='start')
         dj = types.InlineKeyboardMarkup(row_width=2)
         dj.add(rh)
-        bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='تم اضافة السيشن ايدي بنجاح..',reply_markup=dj)
-
-def n2(message,id):
-    global a,b,j,h,c,m,us
-    sessoinid = open('sessoinid.txt','r').read()
-    print(sessoinid)
-    user1=str(message.text)
-    url2='https://www.instagram.com/api/v1/users/web_profile_info/?username={}'.format(user1)
-    head2={
-        'accept': '*/*',
-        'accept-encoding': 'gzip, deflate, br',
-        'accept-language': 'en-US,en;q=0.9',
-        'cookie': 'dwjhdjwqdkqldususs9dikkxjsahxjqdqdq',
-        'referer': 'https://www.instagram.com/gzik/?a=1&d=dis',
-        'sec-ch-prefers-color-scheme': 'light',
-        'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-origin',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
-        'viewport-width': '917',
-        'x-asbd-id': '198387',
-        'x-csrftoken': 'jYtUPej72VOcpPBby1dtNJUOyYkxLTCH',
-        'x-ig-app-id': '936619743392459',
-        'x-ig-www-claim': 'hmac.AR2YVBVpnG3H4yWcpVkZPU__dxvBtni5oqdISKu1TJqqP0xo',
-        'x-instagram-ajax': '1006627630',
-        'x-requested-with': 'XMLHttpRequest'
-    }
-    ge = requests.get(url2,headers=head2).json()
-    pr = ge['data']['user']['is_private']
-    idd= ge['data']['user']['id']
-    fols = ge['data']['user']['edge_follow']['count']
-    if pr =='True':
-        bot.send_message(message.chat.id,'الحساب الذي ارسلتة خاص لايمكن سحب لستة')
+        bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='عليك اضافة سيشن ايدي اولا..',reply_markup=dj)
     else:
         
-        fols1 = int(fols)
-        url =f'https://www.instagram.com/api/v1/friendships/{idd}/following/?count='+f'{fols1}'
-        head22={
+        print(sessoinid2)
+        url2='https://www.instagram.com/api/v1/users/web_profile_info/?username={}'.format(user1)
+        head2={
             'accept': '*/*',
             'accept-encoding': 'gzip, deflate, br',
             'accept-language': 'en-US,en;q=0.9',
-            'cookie': f'mid=YF55GAALAAF55lDR3NkHNG4S-vjw; ig_did=F3A1F3B5-01DB-457B-A6FA-6F83AD1717DE; ig_nrcb=1; shbid=13126; shbts=1616804137.1316793; rur=PRN; ig_direct_region_hint=ATN; csrftoken=ot7HDQ6ZX2EPbVQe1P9Nqvm1WmMkzKn2; ds_user_id=46165248972; sessionid={sessoinid}',
+            'cookie': 'dwjhdjwqdkqldususs9dikkxjsahxjqdqdq',
             'referer': 'https://www.instagram.com/gzik/?a=1&d=dis',
             'sec-ch-prefers-color-scheme': 'light',
             'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
@@ -175,33 +142,65 @@ def n2(message,id):
             'x-instagram-ajax': '1006627630',
             'x-requested-with': 'XMLHttpRequest'
         }
-        
-        try:
-            geg= requests.get(url,headers=head22).json()
-        except requests.exceptions.JSONDecodeError as error:
-            bot.send_message(message.chat.id,'السيشن ايدي الخاص بك خطا - غير شغال')
-        for i in range(0,fols):
+        ge = requests.get(url2,headers=head2).json()
+        pr = ge['data']['user']['is_private']
+        idd= ge['data']['user']['id']
+        fols = ge['data']['user']['edge_follow']['count']
+        if pr =='True':
+            bot.send_message(message.chat.id,'الحساب الذي ارسلتة خاص لايمكن سحب لستة')
+        else:
+            
+            fols1 = int(fols)
+            url =f'https://www.instagram.com/api/v1/friendships/{idd}/following/?count='+f'{fols1}'
+            head22={
+                'accept': '*/*',
+                'accept-encoding': 'gzip, deflate, br',
+                'accept-language': 'en-US,en;q=0.9',
+                'cookie': f'mid=YF55GAALAAF55lDR3NkHNG4S-vjw; ig_did=F3A1F3B5-01DB-457B-A6FA-6F83AD1717DE; ig_nrcb=1; shbid=13126; shbts=1616804137.1316793; rur=PRN; ig_direct_region_hint=ATN; csrftoken=ot7HDQ6ZX2EPbVQe1P9Nqvm1WmMkzKn2; ds_user_id=46165248972; sessionid={sessoinid2}',
+                'referer': 'https://www.instagram.com/gzik/?a=1&d=dis',
+                'sec-ch-prefers-color-scheme': 'light',
+                'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+                'viewport-width': '917',
+                'x-asbd-id': '198387',
+                'x-csrftoken': 'jYtUPej72VOcpPBby1dtNJUOyYkxLTCH',
+                'x-ig-app-id': '936619743392459',
+                'x-ig-www-claim': 'hmac.AR2YVBVpnG3H4yWcpVkZPU__dxvBtni5oqdISKu1TJqqP0xo',
+                'x-instagram-ajax': '1006627630',
+                'x-requested-with': 'XMLHttpRequest'
+            }
+            
             try:
+                geg= requests.get(url,headers=head22).json()
+            except requests.exceptions.JSONDecodeError as error:
+                bot.send_message(message.chat.id,'السيشن ايدي الخاص بك خطا - غير شغال')
+            for i in range(0,fols):
                 try:
-                    us = geg['users'][i]['username']
-                    with open('username.txt','a') as f8:
-                        f8.write(f'{us}@gmail.com\n')
-                    a+=1
-                    li = types.InlineKeyboardButton(text=f'تم السحب ',callback_data='li')
-                    li1 = types.InlineKeyboardButton(text=f'{a}',callback_data='li1')
-                    lis = types.InlineKeyboardButton(text=f'اليوزرات',callback_data='lis')
-                    lis1 = types.InlineKeyboardButton(text=f"{us}",callback_data='lis1')
-                    er1 = types.InlineKeyboardButton(text=f"{b}",callback_data='er1')
-                    er = types.InlineKeyboardButton(text=f'خطا',callback_data='er')
-                    ui = types.InlineKeyboardMarkup(row_width=2)
-                    ui.add(li1,li,lis1,lis,er1,er)
-                    bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='جار سحب اللستة .. عليك الانتظار',reply_markup=ui)
-                except KeyError as error:
-                    b+=1
-            except IndexError as error:
-                user = us
-                user1= user
-                n2(user1)
+                    try:
+                        us = geg['users'][i]['username']
+                        with open('username.txt','a') as f8:
+                            f8.write(f'{us}@gmail.com\n')
+                        a+=1
+                        li = types.InlineKeyboardButton(text=f'تم السحب ',callback_data='li')
+                        li1 = types.InlineKeyboardButton(text=f'{a}',callback_data='li1')
+                        lis = types.InlineKeyboardButton(text=f'اليوزرات',callback_data='lis')
+                        lis1 = types.InlineKeyboardButton(text=f"{us}",callback_data='lis1')
+                        er1 = types.InlineKeyboardButton(text=f"{b}",callback_data='er1')
+                        er = types.InlineKeyboardButton(text=f'خطا',callback_data='er')
+                        ui = types.InlineKeyboardMarkup(row_width=2)
+                        ui.add(li1,li,lis1,lis,er1,er)
+                        bot.edit_message_text(chat_id=message.chat.id,message_id=id,text='جار سحب اللستة .. عليك الانتظار',reply_markup=ui)
+                    except KeyError as error:
+                        b+=1
+                except IndexError as error:
+                    user = us
+                    user1= user
+                    n2(user1)
 def n3(message,id):
     global a,b,j,h,c,m,us,today,L
     iw = str(message.text)
@@ -259,23 +258,54 @@ def n3(message,id):
                 
                 rf = requests.post(url,headers=head1,data=data).text
                 if ('"user":true,') in rf:
-                    url3 ='https://android.clients.google.com/setup/checkavail'
-                    headers = {
-                    'Content-Length':'98',
-                    'Content-Type':'text/plain;charset=UTF-8',
-                    'Host':'android.clients.google.com',
-                    'Connection':'Keep-Alive',
-                    'user-agent':'GoogleLoginService/1.3(m0 JSS15J)',}
-                    data= json.dumps({
-                    'username':f'{username}',
-                    'version':'3',
-                    'firstName':'AbaLahb',
-                    'lastName':'AbuJahl'
-                })
-                    res=requests.post(url3,headers=headers,data=data)
-                    if res.json()['status'] =='USERNAME_UNAVAILABLE':
+                    url4 ='https://accounts.google.com/_/signup/webusernameavailability?hl=en&_reqid=33779&rt=j'
+                    headers4 ={
+                        'accept': '*/*',
+                        'accept-encoding': 'gzip, deflate, br',
+                        'accept-language': 'en-US,en;q=0.9',
+                        'content-length': '1299',
+                        'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                        'cookie': 'SEARCH_SAMESITE=CgQI25YB; OTZ=6862229_44_44__44_; ACCOUNT_CHOOSER=AFx_qI7Dy8Pyt2P_UQzwmtt-gcxIA1SUCW5h8MOMVG6X3vuShK9bYgQyVJgD5Sc7RiJ_dVJUcqqMSmgrL8PbbEbq9RnibRvhUJNnG4jlgNiApCU6D-yGyYSnZFjftBKzUNCNS3egHZdtFQgie2PwQyE-0GJOatIggDiDiAOdpCq-MvRavq5m5sUooqBnncGn3fKFwRkhGhC4RW7n3mL59cluUxXFDeUgk_vJWZ9FEKd2gFTSaumDeJbwpjiy1LS_Yio1QvtwKBY4oC2-K843sdLyxEv7wPTKaQ; 1P_JAR=2023-02-12-06; AEC=ARSKqsJpSDqAQ8_d_ueJ10-FYYC6jwHNZ-o8PA8gZ_8zO9aHSb68IrNtmw; NID=511=MvSazwKX9swgyYD9EGvp-jNz-VqUTYSG98pvXFUwHi21HZ65BeuLze_MyXgbtqmKT5ZdMaxmM-_9F_w82FaC-Iapyu8lOkCoTm4Xa_drU7ZAPnUqvQJg5auA0TwVW_J4YjbJw75osjkQVrnH-SlMLPtYaZvbTeRzpBl4Xf-YZMqmasOhOt506eBRVT4JOex5VIkKZ1rlKdvku1AnipDGz5GwWcBQsAqLdHx5aqc-N7u9FpalfP--HZljHWVls9y5TjlDpQUehbG8EclYXEus8fjXFYqr619wz-8cUQpFVKXR; __Host-GAPS=1:5i6teqapVnumoCVriw_N_kEWYxm5shSKMeU7ttNb-yF8JceaEWIj8xpBmHhUmrZg9rJH7g8zYMBuKpQEEtdPz8z2b5mK_8lCNn8ulWf3wZ2-Gpx0kIbNROQCzH9rqA:EGm-kxIXSIMcZsu_',
+                        'google-accounts-xsrf': '1',
+                        'origin': 'https://accounts.google.com',
+                        'referer': 'https://accounts.google.com/signup/v2/webcreateaccount?continue=http%3A%2F%2Fsupport.google.com%2Fmail%2Fanswer%2F56256%3Fhl%3Den&hl=en&biz=false&flowName=GlifWebSignIn&flowEntry=SignUp',
+                        'sec-ch-ua': '"Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"',
+                        'sec-ch-ua-arch': '"x86"',
+                        'sec-ch-ua-bitness': '"64"',
+                        'sec-ch-ua-full-version': '"110.0.5481.77"',
+                        'sec-ch-ua-full-version-list': '"Chromium";v="110.0.5481.77", "Not A(Brand";v="24.0.0.0", "Google Chrome";v="110.0.5481.77"',
+                        'sec-ch-ua-mobile': '?0',
+                        'sec-ch-ua-model': '',
+                        'sec-ch-ua-platform': '"Windows"',
+                        'sec-ch-ua-platform-version': '"10.0.0"',
+                        'sec-ch-ua-wow64': '?0',
+                        'sec-fetch-dest': 'empty',
+                        'sec-fetch-mode': 'cors',
+                        'sec-fetch-site': 'same-origin',
+                        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+                        'x-chrome-id-consistency-request': 'version=1,client_id=77185425430.apps.googleusercontent.com,device_id=40581379-e9d2-4653-bf08-33a0d05aa850,signin_mode=all_accounts,signout_mode=show_confirmation',
+                        'x-client-data': 'CIi2yQEIo7bJAQjEtskBCKmdygEIqJbLAQiVocsBCO2CzQEI9orNAQj/i80BCJCMzQEI2IzNAQjIjc0BCNONzQEI0uGsAg==',
+                        
+                        
+                        
+                        'x-same-domain': '1'
+                    }
+                    data4 ={
+                        'continue': 'http://support.google.com/mail/answer/56256?hl=en',
+                        'hl': 'en',
+                        'f.req': f'["AEThLlxj0v24tQyp9EvqjRMi7NsULTVS301h2rUpMQbeWQsDaQuG3JtiMzQVZjkZgCFMP9cwInqVD-n2rbyUHZ1SER_wX0fUvnuzLtqHRyIGXfYYjBDl0COcfKTt504pXxe2YLp52merILFtxS9LX6oWsp0-EXgS-2v4PPtMMLZqYI5nYowehk2jfVTyj63GjtHyyjdlyuzN6NvA9ngbpHuep0jjfHyltQ","cdckdk","cdkckd","{username}",false,"S-368275141:1676182919914955",1]',
+                        'azt': 'AFoagUWcGwerb8F-H7GjsbYgTuj9F5vFqA:1676182919935',
+                        'cookiesDisabled': 'false',
+                        'deviceinfo': '[null,null,null,[],null,"IQ",null,null,null,"GlifWebSignIn",null,[null,null,[],null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,[5,"77185425430.apps.googleusercontent.com",["https://www.google.com/accounts/OAuthLogin"],null,null,"40581379-e9d2-4653-bf08-33a0d05aa850",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,5,null,null,[],null,null,null,null,[]],null,null,null,null,null,null,[],null,null,null,null,[]],null,null,null,null,1,null,false,1,""]',
+                        'gmscoreversion': 'undefined'
+                        
+                    }
+                    r4 = requests.post(url4,headers=headers4,data=data4).text
+                    if ('"EmailInvalid"') in r4:
                         b+=1
-                    elif res.json()['status'] =='SUCCESS':
+                    elif ('"gf.wuar",2,') in r4:
+                        b+=1
+                    elif ('"gf.wuar",1') in r4:
                         nn = username.split('@')[0]
                         a+=1
                         url2='https://www.instagram.com/api/v1/users/web_profile_info/?username={}'.format(nn)
